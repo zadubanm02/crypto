@@ -2,36 +2,50 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { Pressable, Text } from 'react-native';
+import { Button } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import { PortfolioScreen } from '../screens/PortfolioScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      initialRouteName="Portfolio"
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint,
+        showLabel:false,
+        style:{ padding:0, alignItems:'center', justifyContent:'center', height:60, backgroundColor:'#1A153A', borderTopWidth:0}}}>
       <BottomTab.Screen
-        name="TabOne"
+        name="Watchlist"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="eye" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="List"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
+      <BottomTab.Screen
+        name="Portfolio"
+        component={TabThreeNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
+        }}
+      />
+      
     </BottomTab.Navigator>
   );
 }
@@ -44,29 +58,80 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TabOneStack = createStackNavigator();
 
 function TabOneNavigator() {
   return (
-    <TabOneStack.Navigator>
+    <TabOneStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#1A153A",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0,
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold"
+        }
+      }}
+    >
       <TabOneStack.Screen
-        name="TabOneScreen"
+        name="Watchlist"
         component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{ headerTitle: 'Your Crypto' }}
       />
     </TabOneStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const TabTwoStack = createStackNavigator();
 
 function TabTwoNavigator() {
   return (
-    <TabTwoStack.Navigator>
+    <TabTwoStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#1A153A",
+        elevation: 0, // remove shadow on Android
+        shadowOpacity: 0,
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold"
+      }
+    }}
+    >
       <TabTwoStack.Screen
-        name="TabTwoScreen"
+        name="Portfolio"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: '' }}
+      />
+    </TabTwoStack.Navigator>
+  );
+}
+
+const TabThreeStack = createStackNavigator();
+
+function TabThreeNavigator() {
+  return (
+    <TabTwoStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#1A153A",
+        elevation: 0, // remove shadow on Android
+        shadowOpacity: 0,
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold"
+      }
+    }}
+    >
+      <TabTwoStack.Screen
+        name="List"
+        component={PortfolioScreen}
+        options={{ headerTitle: 'Portfolio',
+         }}
       />
     </TabTwoStack.Navigator>
   );
