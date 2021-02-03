@@ -5,7 +5,19 @@ import useCoin from '../hooks/useCoinData'
 import Graph from './Graph'
 import { MiniGraph } from './MiniGraph'
 
-export const CryptoRow = ({name, symbol, image, price, percentage, color, graphData, onPress}) => {
+interface CryptoRowProps {
+    symbol:string;
+    name:string;
+    price:number;
+    marketCap:number;
+    image:string;
+    graphData:[];
+    percentage:number;
+    color:string;
+    onPress:any;
+}
+
+export const CryptoRow:React.FC<CryptoRowProps> = ({name, symbol, image, price, percentage, color, graphData, onPress}) => {
     return (
         <>
             <TouchableOpacity style={{margin:2, padding:5, flexDirection:'row', alignItems:'center'}} onPress={()=>onPress()}>

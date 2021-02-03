@@ -3,9 +3,15 @@ import { Modal, ScrollView, TextInput, TouchableOpacity, View, Text } from 'reac
 import { items } from '../screens/items'
 import { SearchableRow } from './SearchableRow'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSetState } from '../hooks/mySetState';
+import { useSetState } from '../hooks/mySetState';]
 
-export const SearchCryptoModal = ({visible, closeModal, getData}) => {
+interface SearchCryptoProps {
+    visible:boolean;
+    closeModal:any;
+    getData:any;
+}
+
+export const SearchCryptoModal:React.FC<SearchCryptoProps> = ({visible, closeModal, getData}) => {
     const [crypto, setCrypto] = useState<string>();
     const [searchValue, setSearchValue] = useState<string>()
     const [state, setState, getState] = useSetState()

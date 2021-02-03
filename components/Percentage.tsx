@@ -1,7 +1,14 @@
 import React from 'react'
 import { View, Text, Image } from 'react-native'
 
-export const Percentage = ({value, symbol, image}) => {
+interface PercentageProps {
+    value:number;
+    symbol:string;
+    image:string;
+   
+}
+
+export const Percentage:React.FC<PercentageProps> = ({value, symbol, image}) => {
     return (
         <View style={{paddingVertical:10,marginHorizontal:10, margin:10, alignItems:'center', justifyContent:'center'}}>
         <Text style={{color:'#fff', fontSize:32, fontWeight:'bold'}}>{value.toFixed(2)}%</Text>

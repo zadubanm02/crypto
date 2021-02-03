@@ -16,6 +16,8 @@ import { Percentage } from '../components/Percentage'
 import { AddModal } from './AddModal'
 import { useSelector, useDispatch } from 'react-redux'
 import { addCoin } from '../redux/reducer'
+import LottieView from 'lottie-react-native';
+
 
 
 export const PortfolioScreen = () => {
@@ -29,6 +31,7 @@ export const PortfolioScreen = () => {
     const coin = useSelector(state => state.coin)
     const dispatch = useDispatch()
     const [portfolio, setPortfolio]  = useState()
+    const [loading, setLoading] = useState<boolean>(false)
 
     const toggleModal = () => {
         console.log(isModalVisible)
@@ -48,6 +51,8 @@ export const PortfolioScreen = () => {
     }
 
     const loadEverything = async () => {
+        //set loading to true
+        setLoading(true)
         let newPortfolio:any[] = []
         let agregate:number = 0
         let graphValues:any[]=[]
@@ -86,8 +91,9 @@ export const PortfolioScreen = () => {
         setPortfolioValue(agregate)
         setGraphValues(graphValues)
         console.log("Coins", graphCoins, "Valuesxxxxx", graphValues)
-        // thats it!
-          
+        //set loading to false
+        setLoading(false)
+        // thats it! 
     }
 
     const navigation = useNavigation()
@@ -100,6 +106,7 @@ export const PortfolioScreen = () => {
     return (
         <>
         <SafeAreaView style={{backgroundColor:'#1A153A', flex:1}}>
+            
             <ScrollView style={{}}>
                 <View style={{flex:1, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
                 <View style={{padding:10, marginHorizontal:10}}>
@@ -121,6 +128,12 @@ export const PortfolioScreen = () => {
                     })}
                 </ScrollView >
                 {/* <PortfolioGraph graphCoins={graphCoins} graphValues={graphValues} portfolioValue={portfolioVale} /> */}
+                {loading == true ? 
+                <View style={{height:600, backgroundColor:'#2B2C5F', borderTopLeftRadius:20, borderTopRightRadius:20, padding:10, marginTop:10}}>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                <LottieView style={{height:300}} source={require('../assets/mario.json')} autoPlay loop />
+                </View>
+                </View> : 
                 <View style={{height:600, backgroundColor:'#2B2C5F', borderTopLeftRadius:20, borderTopRightRadius:20, padding:10, marginTop:10}}>
                 {dataFromGecko && dataFromGecko.map((item:any, index)=>{
                     return(
@@ -129,7 +142,9 @@ export const PortfolioScreen = () => {
                  deleteCoin={()=>deleteFromPortfolio(item.id).then(()=>loadEverything())}/>
                     )
                 })}
-                 </View>
+                 </View> }
+
+                
             </ScrollView>
             <AddModal visible={addModal} add={()=>addCoinToPortfolio({id:coin.id, value:coin.value}).then(()=>{loadEverything(); dispatch(addCoin({id:'', value:0}))})} closeModal={()=>setAddModal(false)}/>
             </SafeAreaView>

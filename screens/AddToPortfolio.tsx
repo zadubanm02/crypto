@@ -22,7 +22,7 @@ export const AddToPortfolio = () => {
     const [value, setValue] = useState<number>()
     const [coinToAdd, setCoinToAdd] = useState<Portfolio>({id:'', value:0})
     const [data, setData] = useState<any>()
-    const [isModalVisible, setModalVisible] = useState(false);
+    const [isModalVisible, setModalVisible] = useState<boolean>(false);
     const navigation = useNavigation()
 
     const {addCoinToPortfolio, portfolio, deleteFromPortfolio, editCoin, refreshPortfolio} = usePortfolioCoins()

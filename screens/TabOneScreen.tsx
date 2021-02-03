@@ -8,17 +8,23 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import useCoin from '../hooks/useCoinData';
 import { useWatchlistCoins } from '../asyncStorage/useWatchlistCoins';
+import { usePortfolioCoins } from '../asyncStorage/usePortfolioCoins';
+import { fetchForPortfolio } from '../utils/fetchForPortfolio';
+import LottieView from 'lottie-react-native';
+
 
 const wait = (timeout:number) => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
 }
-
+ 
 export default function TabOneScreen() {
  // const {coin} = useCoin()
- const apiKey = 'c7ea99fc38fe350af471d0bda256691f'
-  const [data, setData] = useState<any>()
+ const {deleteFromPortfolio, refreshPortfolio, addCoinToPortfolio, getPortfolioCoins} = usePortfolioCoins()
+const [portfolioData, setPortfolioData] = useState([])
+const [loading, setLoading] = useState<boolean>(false)
+ 
   const [refreshing, setRefreshing] = React.useState(false);
   const {watchlist} = useWatchlistCoins()
 
@@ -26,35 +32,59 @@ export default function TabOneScreen() {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
-  const getCoinData = () => {
-    let res = axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=2&price_change_percentage=24h&sparkline=true`)
-    .then((res:any)=>{
-      console.log("RES data spark", res.data.map(coin=>coin.sparkline_in_7d?.price))
-      setData(res?.data)
-    })
-    console.log("RES", res)
-    return res
- }
+
+  const createIds = (data:any) : string => {
+    let ids:string = ''
+    if(data){
+        data.forEach((item:any)=>{
+            ids += item.id + '%2C%20'
+        })
+        console.log("ids", ids)
+        return ids
+    }
+    return ids
+    
+}
+
+  const getPortfolioData = async () => {
+    setLoading(true)
+    const data = await getPortfolioCoins()
+    console.log("data", data)
+    const ids = createIds(data)
+    console.log("IDS", ids)
+    // fetch data from coingecko
+    const fetchedData = await fetchForPortfolio(ids)
+    console.log("Fetched data", fetchedData)
+    await setPortfolioData(fetchedData)
+    setLoading(false)
+    return fetchedData
+  }
+
+  // <CryptoCard key={coin?.symbol} name={coin?.name} id={coin?.symbol} value={coin?.current_price}
+  // marketCap={coin?.market_cap} color={'88, 191, 88'} graphData={coin?.sparkline_in_7d?.price}/>
+  
  React.useEffect(()=>{
-    const coinData = getCoinData()
-    //setData(data)
-    console.log('QQQ',coinData)
+   getPortfolioData()
  },[])
   return (
     <View style={styles.container}>
-      <ScrollView  refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true}/>
+      {loading == true ?
+        <View style={{justifyContent:'center', alignItems:'center', backgroundColor:'#1A153A'}}>
+        <LottieView style={{height:300}} source={require('../assets/mario.json')} autoPlay loop />
+        </View> :
+         <ScrollView  refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getPortfolioData} enabled={true}/>
         }>
+        
       <View style={{flexDirection:'row', justifyContent:'space-between',backgroundColor:'#1A153A', padding:5}}>
         <Text style={{fontSize:18, fontWeight:'bold', padding:10, color:'#fff'}}>Owned</Text>
         <Text style={{fontSize:18, fontWeight:'bold', padding:10, backgroundColor:'#2B2C5F',color:'#fff', borderRadius:10, marginHorizontal:10}}>3</Text>
         </View>
         <ScrollView horizontal={true}>
-          {data && data.map((coin:any)=>{
-            console.log("data", coin)
+          {portfolioData && portfolioData.map((coin:any, index:number)=> {
             return (
-              <CryptoCard key={coin?.symbol} name={coin?.name} id={coin?.symbol} value={coin?.current_price}
-               marketCap={coin?.market_cap} color={'88, 191, 88'} graphData={coin?.sparkline_in_7d?.price}/>
+               <CryptoCard onPress={{}} key={coin.symbol} name={coin.name} id={coin.symbol} value={coin.current_price}
+                  marketCap={coin.market_cap} color={'88, 191, 88'} />
             )
           })}
         </ScrollView>
@@ -70,6 +100,8 @@ export default function TabOneScreen() {
       <CryptoCard name={'Stellar'} id={'XLM'} value='0.30' marketCap={'30 million'} color={'243, 152, 62'}/> */}
         </ScrollView>
       </ScrollView>
+         }
+      
     </View>
   );
 }

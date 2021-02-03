@@ -6,7 +6,17 @@ import { CardGraph } from './CardGraph'
 import Graph from './Graph'
 import { MiniGraph } from './MiniGraph'
 
-const CryptoCard = ({id, name, value, marketCap, color, graphData, onPress}) => {
+interface CryptoCardProps {
+    id:string;
+    name:string;
+    value:number;
+    marketCap:number;
+    color:string;
+    graphData:[];
+    onPress:any;
+}
+
+const CryptoCard:React.FC<CryptoCardProps> = ({id, name, value, marketCap, color, graphData, onPress}) => {
     
     return (
         <>
