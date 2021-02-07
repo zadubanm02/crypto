@@ -33,7 +33,7 @@ export const CryptoRow:React.FC<CryptoRowProps> = ({name, symbol, image, price, 
                 <MiniGraph graphData={graphData}/>
                 </View>
                 <View style={{justifyContent:'flex-end', marginHorizontal:5}}>
-                <Text style={{color:'#fff', fontSize:16, fontWeight:'bold'}}>{price} EUR</Text>
+                <Text style={{color:'#fff', fontSize:16, fontWeight:'bold'}}>{price} €</Text>
                 <Text style={{color:percentage>0?'#58BF58':'#DD3C7A', textAlign:'right'}}>{percentage.toFixed(2)}%</Text>
                 </View>
             </View>

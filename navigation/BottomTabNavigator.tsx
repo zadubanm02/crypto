@@ -23,7 +23,7 @@ export default function BottomTabNavigator() {
       initialRouteName="Portfolio"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint,
         showLabel:false,
-        style:{ padding:0, alignItems:'center', justifyContent:'center', height:60, backgroundColor:'#1A153A', borderTopWidth:0}}}>
+        style:{ padding:0, alignItems:'center', justifyContent:'center', height:60, backgroundColor:'#1F1D2B', borderTopWidth:0}}}>
       <BottomTab.Screen
         name="Watchlist"
         component={TabOneNavigator}
@@ -65,7 +65,7 @@ function TabOneNavigator() {
     <TabOneStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#1A153A",
+          backgroundColor: "#1F1D2B",
           elevation: 0, // remove shadow on Android
           shadowOpacity: 0,
         },
@@ -91,7 +91,7 @@ function TabTwoNavigator() {
     <TabTwoStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: "#1A153A",
+        backgroundColor: "#1F1D2B",
         elevation: 0, // remove shadow on Android
         shadowOpacity: 0,
       },
@@ -117,7 +117,7 @@ function TabThreeNavigator() {
     <TabTwoStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: "#1A153A",
+        backgroundColor: "#1F1D2B",
         elevation: 0, // remove shadow on Android
         shadowOpacity: 0,
       },

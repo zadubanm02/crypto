@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable } from 'react-native'
+import { FlatList, Pressable } from 'react-native'
 import { View, Text, ScrollView, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BalanceRow } from '../components/BalanceRow'
@@ -19,7 +19,6 @@ import { addCoin } from '../redux/reducer'
 import LottieView from 'lottie-react-native';
 
 
-
 export const PortfolioScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const {deleteFromPortfolio, refreshPortfolio, addCoinToPortfolio, getPortfolioCoins} = usePortfolioCoins()
@@ -32,6 +31,8 @@ export const PortfolioScreen = () => {
     const dispatch = useDispatch()
     const [portfolio, setPortfolio]  = useState()
     const [loading, setLoading] = useState<boolean>(false)
+    const [editing, setEditing] = useState<boolean>(false)
+    const [selectedCoin, setSelectedCoin] = useState(null)
 
     const toggleModal = () => {
         console.log(isModalVisible)
@@ -105,52 +106,54 @@ export const PortfolioScreen = () => {
 
     return (
         <>
-        <SafeAreaView style={{backgroundColor:'#1A153A', flex:1}}>
+        <SafeAreaView style={{backgroundColor:'#1F1D2B', flex:1}}>
             
-            <ScrollView style={{}}>
-                <View style={{flex:1, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
-                <View style={{padding:10, marginHorizontal:10}}>
+            <View style={{}}>
+                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', padding:10, marginHorizontal:10}}>
+                <View style={{}}>
                 <Text style={{color:'#fff', fontWeight:'bold'}}>Portfolio balance</Text>
-                <Text style={{color:'#fff', fontWeight:'bold', fontSize:32}}>{portfolioVale?.toFixed(2)}$</Text>
+                <Text style={{color:'#fff', fontWeight:'bold', fontSize:32}}>{portfolioVale?.toFixed(2)}€</Text>
                 </View>
-                <View style={{padding:10, marginHorizontal:10}}>
-                <Pressable style={{backgroundColor:'#2B2C5F',padding:10, borderRadius:15}} onPress={()=>setAddModal(true)}>
+                <View style={{}}>
+                <Pressable style={{backgroundColor:'#252836',padding:10, borderRadius:15}} onPress={()=>setAddModal(true)}>
                     <Text style={{color:'#fff', fontWeight:'bold', fontSize:16}}>Add to portfolio</Text>
                 </Pressable>
                 </View>
-
                 </View>
-                <ScrollView horizontal={true} style={{marginHorizontal:3}}>
+                <ScrollView horizontal={true} style={{marginHorizontal:10}} bounces={true}>
                     {graphValues && graphValues.map((item:any, index:any) => {
                         return (
                             <Percentage key={index} symbol={item.symbol} value={item.value} image={item.image} />
                         )
                     })}
                 </ScrollView >
-                {/* <PortfolioGraph graphCoins={graphCoins} graphValues={graphValues} portfolioValue={portfolioVale} /> */}
+                </View>
+
                 {loading == true ? 
-                <View style={{height:600, backgroundColor:'#2B2C5F', borderTopLeftRadius:20, borderTopRightRadius:20, padding:10, marginTop:10}}>
+                <View style={{height:600, backgroundColor:'#252836', borderTopLeftRadius:20, borderTopRightRadius:20, padding:10, marginTop:10}}>
                 <View style={{justifyContent:'center', alignItems:'center'}}>
                 <LottieView style={{height:300}} source={require('../assets/mario.json')} autoPlay loop />
                 </View>
                 </View> : 
-                <View style={{height:600, backgroundColor:'#2B2C5F', borderTopLeftRadius:20, borderTopRightRadius:20, padding:10, marginTop:10}}>
-                {dataFromGecko && dataFromGecko.map((item:any, index)=>{
-                    return(
-                        <BalanceRow longPress={{}} key={index} name={item.name} symbol={item.symbol}
-                 image={item.image} value={(item.amount*item.price).toFixed(2)} numberOfCoins={item.amount}
-                 deleteCoin={()=>deleteFromPortfolio(item.id).then(()=>loadEverything())}/>
-                    )
-                })}
-                 </View> }
-
-                
-            </ScrollView>
-            <AddModal visible={addModal} add={()=>addCoinToPortfolio({id:coin.id, value:coin.value}).then(()=>{loadEverything(); dispatch(addCoin({id:'', value:0}))})} closeModal={()=>setAddModal(false)}/>
+                <FlatList
+                contentContainerStyle={{
+                  backgroundColor:'#252836', padding:5, marginBottom:10, borderRadius:15
+                }}
+                data={dataFromGecko}
+                //@ts-ignore
+                keyExtractor={item => item?.symbol}
+                renderItem={({ item }) => (
+                  //@ts-ignore
+                  <BalanceRow edit={{}} longPress={{}} name={item.name} symbol={item.symbol}
+                  image={item.image} value={(item.amount*item.price).toFixed(2)} numberOfCoins={item.amount}
+                  deleteCoin={()=>deleteFromPortfolio(item.id).then(()=>loadEverything())}/>
+                )}
+                onRefresh={loadEverything}
+                refreshing={loading}
+              />
+                 }
+            <AddModal visible={addModal} id={selectedCoin} add={()=>addCoinToPortfolio({id:coin.id, value:coin.value}).then(()=>{loadEverything(); dispatch(addCoin({id:'', value:0}))})} closeModal={()=>{setAddModal(false);}}/>
             </SafeAreaView>
         </>
     )
 }
-
-
-

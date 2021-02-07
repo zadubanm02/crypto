@@ -13,7 +13,7 @@ export const CardGraph:React.FC<CardGraphProps> = ({graphData}) => {
     return (
         <LineChart
         style={{ height:200, width:Dimensions.get('screen').width-40 }}
-        data={data}
+        data={graphData}
         animate={true}
 
         svg={{ stroke: 'rgba(255, 255, 255, 1)' }}

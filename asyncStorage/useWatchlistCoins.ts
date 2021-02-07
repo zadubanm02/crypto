@@ -13,6 +13,10 @@ export const useWatchlistCoins = () => {
         setWatchlist(data)
     }
 
+    async function getWatchlistCoins() {
+        return await getWatchlist()
+    }
+
     async function addCoinToWatchlist(coinId: string) {
         return await addToWatchlist(coinId).then(refreshWatchlist)
     }
@@ -25,7 +29,8 @@ export const useWatchlistCoins = () => {
         watchlist,
         addCoinToWatchlist,
         deleteFromWatchList,
-        refreshWatchlist
+        refreshWatchlist,
+        getWatchlistCoins
     }
 }
 

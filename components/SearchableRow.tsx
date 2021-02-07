@@ -13,7 +13,7 @@ export const SearchableRow:React.FC<RowProps> = ({onPress,id, name, symbol}) => 
     return (
         <View>
         <Pressable onPress={()=>onPress()} 
-        style={{backgroundColor:'#2B2C5F', padding:10, margin:5, flexDirection:'row', borderRadius:15}}>
+        style={{backgroundColor:'#252836', padding:10, margin:5, flexDirection:'row', borderRadius:15}}>
             <Text style={{textTransform:'uppercase', color:'#fff', fontWeight:'bold', fontSize:18, marginHorizontal:10}}>{symbol}</Text>
             <Text style={{textTransform:'uppercase', color:'#fff', fontWeight:'bold', fontSize:18}}>{name}</Text>
         </Pressable>

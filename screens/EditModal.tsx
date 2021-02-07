@@ -22,7 +22,7 @@ import { parse } from '@babel/core'
 
 
 
-export const AddModal = ({visible, add, closeModal}) => {
+export const EditModal = ({visible, edit, closeModal, coin}) => {
     const [selectedCoin, setSelectedCoin] = useState<string>('')
     const [value, setValue] = useState<number>()
     const [coinToAdd, setCoinToAdd] = useState<Portfolio>({id:'', value:0})
@@ -88,7 +88,7 @@ export const AddModal = ({visible, add, closeModal}) => {
                 <Text style={{color:'#fff', fontSize:28, fontWeight:'bold', padding:10, marginVertical:10, textTransform:'uppercase'}}> {value} {data?.symbol} <Image style={{borderRadius:50, width:35, height:35, marginHorizontal:5}}  source={{
           uri: data?.image?.small,
         }} /></Text>
-                <Text style={{color:'#fff', fontSize:28, fontWeight:'bold', padding:10, marginVertical:10}}> {(value * data?.market_data?.current_price?.eur).toFixed(3) || 0 } EUR</Text>
+                <Text style={{color:'#fff', fontSize:28, fontWeight:'bold', padding:10, marginVertical:10}}> {(value  * data?.market_data?.current_price?.eur).toFixed(3)  } EUR</Text>
             </View>
             <View style={{flex:1,justifyContent:'flex-end', marginBottom:30}}>
                 <TouchableOpacity style={{backgroundColor:'#252836', padding:10, margin:10, borderRadius:15}}
