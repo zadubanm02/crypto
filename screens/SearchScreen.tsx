@@ -40,7 +40,8 @@ const navigation = useNavigation()
 const filterItems = (text:string) => {
     setAllItems(items)
     text == '' ? setAllItems(items) :
-   setAllItems(allItems.filter(item=>item.id.toLowerCase().includes(text.toLowerCase()) ))
+   setAllItems(allItems.filter(item=>item?.id.toLowerCase().includes(text.toLowerCase()) ) || allItems.filter(item=>item?.symbol.toLowerCase().includes(text.toLowerCase()) )) 
+   
 }
 
   
@@ -71,12 +72,12 @@ const filterItems = (text:string) => {
       }}
       data={allItems}
       //@ts-ignore
-      keyExtractor={item => item?.symbol}
+      keyExtractor={item => item?.id}
       renderItem={({ item }) => (
         //@ts-ignore
-        <SearchScreenRow onPress={()=>{setSelectedCoin(item.id); toggleModal()}} percentage={item?.price_change_percentage_24h} key={item.symbol} name={item?.name} price={item.current_price}
+        <SearchScreenRow onPress={()=>{setSelectedCoin(item?.id); toggleModal()}} percentage={item?.price_change_percentage_24h} key={item?.symbol} name={item?.name} price={item?.current_price}
       //@ts-ignore
-       symbol={item.symbol} image={item.image} graphData={item?.sparkline_in_7d?.price} />
+       symbol={item?.symbol} image={item?.image} graphData={item?.sparkline_in_7d?.price} />
       )}
       />
       }

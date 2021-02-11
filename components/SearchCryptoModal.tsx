@@ -51,9 +51,9 @@ export const SearchCryptoModal:React.FC<SearchCryptoProps> = ({visible, closeMod
       keyExtractor={item => item?.symbol}
       renderItem={({ item }) => (
         //@ts-ignore
-        <SearchScreenRow onPress={()=>{updateCrypto(item.id).then(async ()=>getData(await getState()));setCrypto(item.id);console.log("ItemID",item.id); console.log("XXXX",crypto);closeModal(); }}
+        <SearchScreenRow onPress={()=>{updateCrypto(item?.id).then(async ()=>getData(await getState()));setCrypto(item?.id);console.log("ItemID",item?.id); console.log("XXXX",crypto);closeModal(); }}
         //@ts-ignore
-         name={item?.name} symbol={item.symbol} image={item.image}  />
+         name={item?.name} symbol={item?.symbol} image={item?.image}  />
       )}
       />
                  {/* <ScrollView style={{ margin:5}}>

@@ -57,9 +57,9 @@ export default function TabTwoScreen() {
           keyExtractor={item => item?.symbol}
           renderItem={({ item }) => (
             //@ts-ignore
-            <CryptoRow onPress={()=>{setSelectedCoin(item.id); toggleModal()}} percentage={item?.price_change_percentage_24h} key={item.symbol} name={item?.name} price={item.current_price}
+            <CryptoRow onPress={()=>{setSelectedCoin(item?.id); toggleModal()}} percentage={item?.price_change_percentage_24h} key={item?.symbol} name={item?.name} price={item?.current_price}
           //@ts-ignore
-           symbol={item.symbol} image={item.image} graphData={item?.sparkline_in_7d?.price} />
+           symbol={item?.symbol} image={item?.image} graphData={item?.sparkline_in_7d?.price} />
           )}
           onEndReached={getData}
           onEndReachedThreshold={0.1}

@@ -48,7 +48,7 @@ const toggleModal = () => {
     let ids:string = ''
     if(data){
         data.forEach((item:any)=>{  
-              ids += item.id + '%2C%20'
+              ids += item?.id + '%2C%20'
         })
         console.log("ids", ids)
         return ids
@@ -77,28 +77,25 @@ const createWatchlistIds = (data:any) : string => {
     const ids = createIds(data)
     const fetchedData = await fetchForPortfolio(ids)
     setPortfolioData(fetchedData)
-    setPortfolioLength(data.length)
+    setPortfolioLength(data?.length)
     //Watchlist Data
     const watchData = await getWatchlistCoins()
     const watchlistIds = createWatchlistIds(watchData)
     const fetchedDataWatchlist = await fetchForPortfolio(watchlistIds)
     setWatchlistData(fetchedDataWatchlist)
-    setWatchlistLength(watchData.length)
+    setWatchlistLength(watchData?.length)
     setLoading(false)
     return fetchedData
   }
   
  React.useEffect(()=>{
-   getPortfolioData()
+   const data = getPortfolioData()
    console.log("Portfoli")
  },[])
 
   return (
     <SafeAreaView style={styles.container}>
-      {loading == true ?
-        <View style={{justifyContent:'center', alignItems:'center', backgroundColor:'#1F1D2B'}}>
-        <LottieView style={{height:300}} source={require('../assets/mario.json')} autoPlay loop />
-        </View> :
+      
          <View >
           <View style={{flexDirection:'row', backgroundColor:'#1F1D2B',  padding:10}}>
           <Pressable onPress={()=>setView('watching')} style={{width:150,padding:10, borderRadius:10, marginHorizontal:10, backgroundColor:view=='watching' ? '#252836' :'#1F1D2B' }}>
@@ -108,7 +105,12 @@ const createWatchlistIds = (data:any) : string => {
         <Text style={{fontSize:18,textAlign:'center', fontWeight:'bold',color:'#fff'}}>Owned</Text>
         </Pressable>
           </View>
-        {view == 'watching' ?
+          {loading == true ?
+        <View style={{justifyContent:'center', alignItems:'center', backgroundColor:'#1F1D2B'}}>
+        <LottieView style={{height:300}} source={require('../assets/mario.json')} autoPlay loop />
+        </View> :
+        
+        view == 'watching' ?
         <SafeAreaView>
         <FlatList
         contentContainerStyle={{
@@ -119,9 +121,9 @@ const createWatchlistIds = (data:any) : string => {
         keyExtractor={item => item?.symbol}
         renderItem={({ item }) => (
           //@ts-ignore
-          <CryptoCard onPress={()=>{setSelectedCoin(item.id); toggleModal()}} graphData={item?.sparkline_in_7d?.price || [1]} image={item.image} name={item.name} id={item.symbol} value={item.current_price}
+          <CryptoCard onPress={()=>{setSelectedCoin(item?.id); toggleModal()}} graphData={item?.sparkline_in_7d?.price || [1]} image={item?.image} name={item?.name} id={item?.symbol} value={item?.current_price}
           //@ts-ignore
-          marketCap={item.market_cap} color={'88, 191, 88'} />
+          marketCap={item?.market_cap} color={'88, 191, 88'} />
         )}
         
         onRefresh={getPortfolioData}
@@ -138,9 +140,9 @@ const createWatchlistIds = (data:any) : string => {
         keyExtractor={item => item?.symbol}
         renderItem={({ item }) => (
           //@ts-ignore
-          <CryptoCard onPress={()=>{setSelectedCoin(item.id); toggleModal()}} graphData={item?.sparkline_in_7d?.price || [1]} image={item.image} name={item.name} id={item.symbol} value={item.current_price}
+          <CryptoCard onPress={()=>{setSelectedCoin(item?.id); toggleModal()}} graphData={item?.sparkline_in_7d?.price || [1]} image={item?.image} name={item?.name} id={item?.symbol} value={item?.current_price}
           //@ts-ignore
-          marketCap={item.market_cap} color={'88, 191, 88'} />
+          marketCap={item?.market_cap} color={'88, 191, 88'} />
         )}
         
         onRefresh={getPortfolioData}
@@ -149,7 +151,6 @@ const createWatchlistIds = (data:any) : string => {
          }
         
       </View>
-         }
       <DetailScreen closeModal={()=>{setSelectedCoin('');setModalVisible(false)}} visible={isModalVisible} id={selectedCoin} />
     </SafeAreaView>
   );

@@ -43,7 +43,7 @@ export const PortfolioScreen = () => {
         let ids:string = ''
         if(data){
             data.forEach((item:any)=>{
-                ids += item.id + '%2C%20'
+                ids += item?.id + '%2C%20'
             })
             console.log("ids", ids)
             return ids
@@ -65,14 +65,14 @@ export const PortfolioScreen = () => {
         const fetchedData = await fetchForPortfolio(ids)
         // create new data from coingecko data
             data.forEach((item:Portfolio)=>{
-                const found = fetchedData.find((coin:any)=>coin.id == item.id)
+                const found = fetchedData.find((coin:any)=>coin?.id == item?.id)
                 let newCoinObject = {
                     id:found?.id,
                     name:found?.name,
                     image:found?.image,
                     symbol:found?.symbol,
                     price:found?.current_price,
-                    amount:item.value
+                    amount:item?.value
                  };
                 newPortfolio = [...newPortfolio, newCoinObject]
             })
@@ -81,12 +81,12 @@ export const PortfolioScreen = () => {
         setDataFromGecko(newPortfolio)  
         // create total portfolio value
         newPortfolio.forEach((item:any)=>{
-            agregate += item.amount*item.price
+            agregate += item?.amount*item?.price
           
         })
         // create data from graph
         newPortfolio.forEach((item:any)=>{
-            graphValues = [...graphValues,{value:((item.amount*item.price)/agregate*100),symbol:item.symbol, image:item.image}]
+            graphValues = [...graphValues,{value:((item?.amount*item?.price)/agregate*100),symbol:item?.symbol, image:item?.image}]
         })
         //give it to state
         setPortfolioValue(agregate)
@@ -123,7 +123,7 @@ export const PortfolioScreen = () => {
                 <ScrollView horizontal={true} style={{marginHorizontal:10}} bounces={true}>
                     {graphValues && graphValues.map((item:any, index:any) => {
                         return (
-                            <Percentage key={index} symbol={item.symbol} value={item.value} image={item.image} />
+                            <Percentage key={item?.id} symbol={item?.symbol} value={item?.value} image={item?.image} />
                         )
                     })}
                 </ScrollView >
@@ -141,12 +141,12 @@ export const PortfolioScreen = () => {
                 }}
                 data={dataFromGecko}
                 //@ts-ignore
-                keyExtractor={item => item?.symbol}
+                keyExtractor={item => item?.id}
                 renderItem={({ item }) => (
                   //@ts-ignore
-                  <BalanceRow edit={{}} longPress={{}} name={item.name} symbol={item.symbol}
-                  image={item.image} value={(item.amount*item.price).toFixed(2)} numberOfCoins={item.amount}
-                  deleteCoin={()=>deleteFromPortfolio(item.id).then(()=>loadEverything())}/>
+                  <BalanceRow edit={{}} longPress={{}} name={item?.name} symbol={item?.symbol}
+                  image={item?.image} value={(item?.amount*item?.price).toFixed(2)} numberOfCoins={item?.amount}
+                  deleteCoin={()=>deleteFromPortfolio(item?.id).then(()=>loadEverything())}/>
                 )}
                 onRefresh={loadEverything}
                 refreshing={loading}
